@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>客服助手 · Chatbot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 id="brandTitle">客服助手</h1>
+          <p class="brand-sub">AI 智能客服 · 在线</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-btn active" data-panel="chat">对话</button>
+        <button type="button" class="nav-btn" data-panel="knowledge">知识库</button>
+        <button type="button" class="nav-btn" data-panel="settings">设置</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button type="button" id="newChatBtn" class="btn-secondary">新对话</button>
+        <label class="toggle-rag" title="需先成功上传知识库文档后再开启">
+          <input type="checkbox" id="ragToggle" disabled />
+          <span id="ragToggleLabel">知识库检索（需先上传文档）</span>
+        </label>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="apiBanner" class="api-banner hidden" role="alert"></div>
+      <!-- Chat panel -->
+      <section id="panel-chat" class="panel active">
+        <header class="chat-header">
+          <div>
+            <h2>在线客服</h2>
+            <p>有问题随时提问，我们会基于知识库为您解答</p>
+          </div>
+          <span class="status-pill" id="statusPill">就绪</span>
+        </header>
+
+        <div class="messages" id="messages" role="log" aria-live="polite"></div>
+
+        <form class="composer" id="chatForm">
+          <textarea
+            id="messageInput"
+            rows="1"
+            placeholder="输入您的问题…"
+            maxlength="8000"
+            required
+          ></textarea>
+          <button type="submit" id="sendBtn" class="btn-primary" aria-label="发送">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- Knowledge panel -->
+      <section id="panel-knowledge" class="panel">
+        <header class="chat-header">
+          <div>
+            <h2>知识库管理</h2>
+            <p>上传 PDF 或文本文件，自动向量化供客服检索</p>
+          </div>
+        </header>
+        <div class="kb-upload">
+          <label class="upload-zone" id="uploadZone">
+            <input type="file" id="fileInput" accept=".pdf,.txt,.md,.markdown" hidden />
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" fill="none" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>拖拽文件到此处，或点击上传</span>
+            <small>支持 PDF、TXT、MD（最大 10MB）</small>
+          </label>
+        </div>
+        <ul class="doc-list" id="docList"></ul>
+      </section>
+
+      <!-- Settings panel -->
+      <section id="panel-settings" class="panel">
+        <header class="chat-header">
+          <div>
+            <h2>品牌与 Prompt</h2>
+            <p>自定义客服语气与系统指令（无需改代码）</p>
+          </div>
+        </header>
+        <form class="settings-form" id="settingsForm">
+          <label>
+            <span>品牌名称</span>
+            <input type="text" id="brandName" name="brand_name" />
+          </label>
+          <label>
+            <span>业务描述</span>
+            <input type="text" id="companyDesc" name="company_description" />
+          </label>
+          <label>
+            <span>语气风格</span>
+            <input type="text" id="promptTone" name="system_prompt_tone" placeholder="friendly, concise, professional" />
+          </label>
+          <label>
+            <span>自定义系统 Prompt（留空使用默认模板）</span>
+            <textarea id="customPrompt" name="custom_system_prompt" rows="6"></textarea>
+          </label>
+          <button type="submit" class="btn-primary">保存配置</button>
+        </form>
+        <pre class="prompt-preview" id="promptPreview"></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
