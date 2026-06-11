@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  chat-bot:
+    build: .
+    container_name: chat-bot
+    ports:
+      - "8000:8000"
+    environment:
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+    volumes:
+      - ./Chatbot/data:/app/data
+      - ./Chatbot/docs/sample_knowledge:/app/sample_knowledge
+    restart: unless-stopped
